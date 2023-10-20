@@ -26,8 +26,6 @@ public class User {
     @Column(nullable = false)
     private  String password;
 
-    @ManyToMany
-    @LazyCollection
-    private Set<Role> roles;
+
 
 }
