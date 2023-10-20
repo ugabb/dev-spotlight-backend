@@ -1,6 +1,6 @@
 package com.devspotlight.devspotlight.service;
 
-import com.devspotlight.devspotlight.entity.User;
+import com.devspotlight.devspotlight.model.User;
 import com.devspotlight.devspotlight.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDetail implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepo;
