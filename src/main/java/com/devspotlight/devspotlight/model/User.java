@@ -11,7 +11,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "name", nullable = false)
@@ -42,8 +42,4 @@ public class User {
 
     @Column(name = "favorites_repositories")
     private List<FavRepositories> favoritesRepositories;
-
-
-
-
 }
