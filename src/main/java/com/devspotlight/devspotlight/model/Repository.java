@@ -1,32 +1,38 @@
 package com.devspotlight.devspotlight.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
 @Entity
 @Table(name = "repository")
+@Data
 public class Repository {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_repository")
     private Long id;
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "description",nullable = false)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "link_repository",nullable = false)
+    @Column(name = "link_repository")
     private String linkRepo;
 
-    @Column(name = "technologies",nullable = false)
+    @OneToMany(mappedBy = "repository")
     private List<Technologies> technologies;
 
-    @Column(name = "images")
-    private List<> images;
+//    @Column(name = "images")
+//    private List<> images;
 
     @Column(name = "likes")
     private Integer likes;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

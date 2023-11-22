@@ -18,4 +18,8 @@ public class Followers {
 
     @Column(name = "follower_photo")
     private String followerPhoto;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
 }

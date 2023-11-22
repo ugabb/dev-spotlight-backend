@@ -11,12 +11,16 @@ public class FavRepositories {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name",nullable = false)
-    private String name;
+    @Column(name = "fav_repo_name",nullable = false)
+    private String fav_repo_name;
 
     @Column(name = "link_repository",nullable = false)
     private String link;
 
     @Column(name = "author_username",nullable = false)
     private String author;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
