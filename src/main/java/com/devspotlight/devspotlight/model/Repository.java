@@ -23,7 +23,7 @@ public class Repository {
     @Column(name = "link_repository")
     private String linkRepo;
 
-    @OneToMany(mappedBy = "repository")
+    @OneToMany(mappedBy = "repository",cascade = CascadeType.ALL)
     private List<Technologies> technologies;
 
 //    @Column(name = "images")

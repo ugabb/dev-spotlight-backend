@@ -1,8 +1,11 @@
 package com.devspotlight.devspotlight.service;
 
 import com.devspotlight.devspotlight.dto.RepositoryDTO;
+import com.devspotlight.devspotlight.dto.TechnologiesDTO;
 import com.devspotlight.devspotlight.model.Repository;
+import com.devspotlight.devspotlight.model.Technologies;
 import com.devspotlight.devspotlight.repository.RepositoryRepository;
+import com.devspotlight.devspotlight.repository.TechnologiesRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -22,18 +25,28 @@ public class RepositoryServiceImpl implements RepositoryService {
     @Autowired
     private RepositoryRepository repository;
 
+    @Autowired
+    private TechnologiesRepository technologiesRepository;
+
     @Override
     public Optional<RepositoryDTO> createRepository(RepositoryDTO request) {
-//        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-//        Set<ConstraintViolation<RepositoryDTO>> violations = validator.validate(request);
-//
-//        if(!violations.isEmpty()){
-//            throw new RuntimeException("Repository DTO validation failed.");
-//        }
+
         Repository repo = mapper.map(request, Repository.class);
+        Repository savedRepo = repository.saveAndFlush(repo);
+
+        Long repoId = savedRepo.getId();
+        System.out.println("REPOSITORY ID:");
+        System.out.println(repoId);
+
+        // Set the Repository ID in Technologies
+        List<TechnologiesDTO> technologiesDTOList = request.getTechnologies();
+        for (TechnologiesDTO techDto : technologiesDTOList) {
+            techDto.setRepoId(repoId); // Set Repository with ID
+            technologiesRepository.saveAndFlush(mapper.map(techDto, Technologies.class));
+        }
+
         RepositoryDTO response = mapper.map(repo, RepositoryDTO.class);
-        System.out.println("request:");
-        System.out.println(repo);
+
         repository.saveAndFlush(repo);
         return Optional.of(response);
     }

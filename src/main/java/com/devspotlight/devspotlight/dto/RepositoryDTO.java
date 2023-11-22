@@ -20,7 +20,7 @@ public class RepositoryDTO {
     @NotNull
     private String linkRepo;
 
-    private List<Technologies> technologies;
+    private List<TechnologiesDTO> technologies;
     private Integer likes;
     @NotBlank
     private Long userId;
