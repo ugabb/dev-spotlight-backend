@@ -12,5 +12,5 @@ public class TechnologiesDTO {
     private String name;
     private String icon;
     @NotBlank
-    private Long repoId;
+    private Long repository_id;
 }

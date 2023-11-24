@@ -10,6 +10,7 @@ import java.util.List;
 
 @Data
 public class RepositoryDTO {
+    private Long id;
     @NotBlank
     @NotNull
     private String name;
@@ -24,5 +25,4 @@ public class RepositoryDTO {
     private Integer likes;
     @NotBlank
     private Long userId;
-
 }

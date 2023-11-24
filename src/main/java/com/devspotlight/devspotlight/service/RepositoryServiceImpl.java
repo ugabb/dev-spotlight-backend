@@ -30,26 +30,43 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     @Override
     public Optional<RepositoryDTO> createRepository(RepositoryDTO request) {
-
+        // incompleto
         Repository repo = mapper.map(request, Repository.class);
         Repository savedRepo = repository.saveAndFlush(repo);
 
         Long repoId = savedRepo.getId();
-        System.out.println("REPOSITORY ID:");
-        System.out.println(repoId);
 
-        // Set the Repository ID in Technologies
         List<TechnologiesDTO> technologiesDTOList = request.getTechnologies();
         for (TechnologiesDTO techDto : technologiesDTOList) {
-            techDto.setRepoId(repoId); // Set Repository with ID
-            technologiesRepository.saveAndFlush(mapper.map(techDto, Technologies.class));
+            Technologies tech = mapper.map(techDto, Technologies.class);
+
+            // Set the repositoryId in TechnologiesDTO
+            techDto.setRepository_id(repoId); // Setting repository ID in TechnologiesDTO
+
+            // Create a new Repository object and set its ID
+//            Repository repoForTech = new Repository();
+            repo.setId(repoId);
+
+            // Set the created Repository in Technologies
+            tech.setRepository(repo);
+            technologiesRepository.saveAndFlush(tech);
         }
 
-        RepositoryDTO response = mapper.map(repo, RepositoryDTO.class);
 
-        repository.saveAndFlush(repo);
-        return Optional.of(response);
+        Optional<Repository> newRepoOptional = repository.findById(repoId);
+        if (newRepoOptional.isPresent()) {
+            Repository newRepo = newRepoOptional.get();
+            RepositoryDTO response = mapper.map(newRepo, RepositoryDTO.class);
+            for (TechnologiesDTO technologies : response.getTechnologies()) {
+                technologies.setRepository_id(repoId);
+            }
+            return Optional.of(response);
+        } else {
+            // Handle the case where the repository was not found
+            return Optional.empty();
+        }
     }
+
 
     @Override
     public List<RepositoryDTO> getAllRepositoriesByUser(Long userId) {

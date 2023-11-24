@@ -25,8 +25,6 @@ public class UserServiceImpl implements UserService{
     public Optional<UserDTO> createUser(UserDTO request) {
         User user = mapper.map(request, User.class);
         UserDTO response = mapper.map(user,UserDTO.class);
-        System.out.println("request:");
-        System.out.println(user);
         userRepository.saveAndFlush(user);
         return Optional.of(response);
     }
