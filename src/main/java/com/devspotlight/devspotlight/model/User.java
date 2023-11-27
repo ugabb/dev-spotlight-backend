@@ -46,7 +46,7 @@ public class User implements UserDetails {
     private String githubProfilePhoto;
 
     @OneToMany(mappedBy = "user")
-    private List<Repository> repositories;
+    private List<Project> repositories;
 
    @OneToMany(mappedBy = "user")
     private List<Followers> followers;

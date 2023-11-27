@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "repository")
 @Data
-public class Repository {
+public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_repository")
@@ -23,7 +23,7 @@ public class Repository {
     @Column(name = "link_repository")
     private String linkRepo;
 
-    @OneToMany(mappedBy = "repository",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project",cascade = CascadeType.ALL)
     private List<Technologies> technologies;
 
 //    @Column(name = "images")

@@ -21,5 +21,5 @@ public class Technologies {
 
     @ManyToOne
     @JoinColumn(name = "repository_id")
-    private Repository repository;
+    private Project project;
 }

@@ -1,38 +1,39 @@
 package com.devspotlight.devspotlight.service;
 
-import com.devspotlight.devspotlight.dto.RepositoryDTO;
+import com.devspotlight.devspotlight.dto.ProjectDTO;
 import com.devspotlight.devspotlight.dto.TechnologiesDTO;
-import com.devspotlight.devspotlight.model.Repository;
+import com.devspotlight.devspotlight.model.Project;
 import com.devspotlight.devspotlight.model.Technologies;
-import com.devspotlight.devspotlight.repository.RepositoryRepository;
+import com.devspotlight.devspotlight.repository.ProjectRepository;
 import com.devspotlight.devspotlight.repository.TechnologiesRepository;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
+import com.devspotlight.devspotlight.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
-public class RepositoryServiceImpl implements RepositoryService {
+public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ModelMapper mapper;
     @Autowired
-    private RepositoryRepository repository;
+    private ProjectRepository projectRepository;
 
     @Autowired
     private TechnologiesRepository technologiesRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
-    public Optional<RepositoryDTO> createRepository(RepositoryDTO request) {
+    public Optional<ProjectDTO> createRepository(ProjectDTO request) {
         // incompleto
-        Repository repo = mapper.map(request, Repository.class);
-        Repository savedRepo = repository.saveAndFlush(repo);
+        Project repo = mapper.map(request, Project.class);
+        Project savedRepo = projectRepository.saveAndFlush(repo);
 
         Long repoId = savedRepo.getId();
 
@@ -48,15 +49,15 @@ public class RepositoryServiceImpl implements RepositoryService {
             repo.setId(repoId);
 
             // Set the created Repository in Technologies
-            tech.setRepository(repo);
+            tech.setProject(repo);
             technologiesRepository.saveAndFlush(tech);
         }
 
 
-        Optional<Repository> newRepoOptional = repository.findById(repoId);
+        Optional<Project> newRepoOptional = projectRepository.findById(repoId);
         if (newRepoOptional.isPresent()) {
-            Repository newRepo = newRepoOptional.get();
-            RepositoryDTO response = mapper.map(newRepo, RepositoryDTO.class);
+            Project newRepo = newRepoOptional.get();
+            ProjectDTO response = mapper.map(newRepo, ProjectDTO.class);
             for (TechnologiesDTO technologies : response.getTechnologies()) {
                 technologies.setRepository_id(repoId);
             }
@@ -69,10 +70,21 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 
     @Override
-    public List<RepositoryDTO> getAllRepositoriesByUser(Long userId) {
-        List<Repository> repos = repository.findByUserId(userId);
+    public List<ProjectDTO> getAllRepositoriesByUser(Long userId) {
+        List<Project> repos = projectRepository.findByUserId(userId);
         return repos.stream()
-                .map(repo -> mapper.map(repo, RepositoryDTO.class))
+                .map(repo -> mapper.map(repo, ProjectDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<ProjectDTO> getProjectByUserAndId(Long userId, Long projectId) {
+        List<Project> projects = projectRepository.findByUserId(userId);
+        Optional<Project> projectById = projects.stream().filter(project -> Objects.equals(project.getId(), projectId)).findFirst();
+        ProjectDTO projectDTO = mapper.map(projectById, ProjectDTO.class);
+
+        System.out.println(projectDTO);
+
+        return Optional.of(projectDTO);
     }
 }

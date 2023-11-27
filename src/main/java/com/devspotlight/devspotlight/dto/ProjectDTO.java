@@ -1,7 +1,5 @@
 package com.devspotlight.devspotlight.dto;
 
-import com.devspotlight.devspotlight.model.Technologies;
-import com.devspotlight.devspotlight.model.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -9,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class RepositoryDTO {
+public class ProjectDTO {
     private Long id;
     @NotBlank
     @NotNull
