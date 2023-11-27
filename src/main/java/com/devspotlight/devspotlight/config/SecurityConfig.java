@@ -15,15 +15,17 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     @Bean
-    protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                                 .requestMatchers("/login").permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
                                 .anyRequest().authenticated()
 
-                ).httpBasic(withDefaults())
-                .formLogin(withDefaults())
+                )
+                .oauth2Login(oauth -> {
+
+                })
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
