@@ -1,7 +1,6 @@
 package com.devspotlight.devspotlight.service;
 
 import com.devspotlight.devspotlight.dto.UserDTO;
-import com.devspotlight.devspotlight.model.Followers;
 import com.devspotlight.devspotlight.model.User;
 import com.devspotlight.devspotlight.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -24,7 +23,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public Optional<UserDTO> createUser(UserDTO request) {
         User user = mapper.map(request, User.class);
-        UserDTO response = mapper.map(user,UserDTO.class);
+        UserDTO response = mapper.map(user, UserDTO.class);
         userRepository.saveAndFlush(user);
         return Optional.of(response);
     }
@@ -40,4 +39,10 @@ public class UserServiceImpl implements UserService{
         });
         return responsesUserDTO;
     }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 }
