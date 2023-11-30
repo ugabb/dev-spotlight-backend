@@ -68,6 +68,14 @@ public class ProjectServiceImpl implements ProjectService {
         }
     }
 
+    @Override
+    public List<ProjectDTO> getAllProjects() {
+        List<Project> projects = projectRepository.findAll();
+        List<ProjectDTO> pro =  projects.stream().map(project -> mapper.map(project, ProjectDTO.class)).collect(Collectors.toList());
+        System.out.println(pro);
+        return pro;
+    }
+
 
     @Override
     public List<ProjectDTO> getAllRepositoriesByUser(Long userId) {

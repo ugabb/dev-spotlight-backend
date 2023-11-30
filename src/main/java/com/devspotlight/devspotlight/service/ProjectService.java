@@ -9,6 +9,8 @@ public interface ProjectService {
 
     Optional<ProjectDTO> createRepository(ProjectDTO request);
 
+    List<ProjectDTO> getAllProjects();
+
     List<ProjectDTO> getAllRepositoriesByUser(Long userId);
 
     Optional<ProjectDTO> getProjectByUserAndId(Long userId, Long id);

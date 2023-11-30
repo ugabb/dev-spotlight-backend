@@ -31,6 +31,11 @@ public class ProjectController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
+    @GetMapping
+    public ResponseEntity<List<ProjectDTO>> getAllProjectsController(){
+        return ResponseEntity.ok(projectService.getAllProjects());
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ProjectDTO>> getAllRepositoriesByUserController(@PathVariable("userId") Long userId) {
         Optional<User> user = userRepository.findById(userId);
