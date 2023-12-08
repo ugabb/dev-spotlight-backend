@@ -10,6 +10,7 @@ public interface UserService {
     Optional<UserDTO> createUser(UserDTO request);
 
     List<UserDTO> getAllUsers();
+    String getUserRepositoryLink();
 
     Optional<User> findByUsername(String username);
 }

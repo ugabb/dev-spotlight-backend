@@ -41,6 +41,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String getUserRepositoryLink(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        String responseLink =
+        if(user.isPresent()){
+            return user.get().getGithubProfileLink();
+        }
+    }
+
+    @Override
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

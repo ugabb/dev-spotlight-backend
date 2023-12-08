@@ -37,6 +37,7 @@ public class Auth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSuc
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
 
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
+//        se for authenticado, pega os dados vindo do github
         if ("github".equals(oAuth2AuthenticationToken.getAuthorizedClientRegistrationId())) {
             DefaultOAuth2User principal = (DefaultOAuth2User) authentication.getPrincipal();
             Map<String, Object> attributes = principal.getAttributes();
@@ -46,7 +47,7 @@ public class Auth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSuc
             String gitHubPorfileLink = attributes.get("url") != null ? attributes.get("url").toString() : "";
             String githubProfilePhoto = attributes.get("avatar_url") != null ? attributes.get("avatar_url").toString() : "";
             System.out.println("USERNAME ==================================");
-            System.out.println(username);
+            System.out.println(principal.getAttributes());
             userService.findByUsername(username)
                     .ifPresentOrElse(user -> {
                         DefaultOAuth2User newUser = new DefaultOAuth2User(List.of(new SimpleGrantedAuthority(user.getRole().name())),
