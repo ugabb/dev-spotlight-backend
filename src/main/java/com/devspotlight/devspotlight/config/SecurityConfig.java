@@ -33,14 +33,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests((authorize) -> authorize
-                                .requestMatchers("/login").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
 
-                )
-                .oauth2Login(oauth -> {
-                    oauth.successHandler(auth2LoginSuccessHandler);
-                });
+                );
+//                .oauth2Login(oauth -> {
+//                    oauth.successHandler(auth2LoginSuccessHandler);
+//                });
 
         return http.build();
     }

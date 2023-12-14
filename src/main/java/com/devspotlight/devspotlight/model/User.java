@@ -42,8 +42,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Project> repositories;
 
-   @OneToMany(mappedBy = "user")
-    private List<Followers> followers;
+//   @OneToMany(mappedBy = "user")
+//    private List<Followers> followers;
+    private Integer followers;
 
     @OneToMany(mappedBy = "user")
     private List<FavRepositories> favoritesRepositories;

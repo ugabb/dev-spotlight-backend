@@ -22,7 +22,8 @@ public class UserDTO {
     @NotBlank
     private String githubProfileLink;
     private String githubProfilePhoto;
-    private List<Followers> followers;
+//    private List<Followers> followers;
+    private Integer followers;
     private List<FavRepositories> favoritesRepositories;
     private Role role;
 

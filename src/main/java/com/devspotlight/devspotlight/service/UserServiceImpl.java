@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,8 +42,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<UserDTO> getUserById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.map(u -> mapper.map(u, UserDTO.class));
+    }
+
+    @Override
+    public Optional<UserDTO> findByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.map(u -> mapper.map(u, UserDTO.class));
     }
 
 }
