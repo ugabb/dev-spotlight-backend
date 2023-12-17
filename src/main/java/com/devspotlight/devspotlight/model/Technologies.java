@@ -16,8 +16,8 @@ public class Technologies {
     @Column(name = "technology_name", nullable = false)
     private String name;
 
-    @Column(name = "technology_icon")
-    private String icon;
+//    @Column(name = "technology_icon")
+//    private String icon;
 
     @ManyToOne
     @JoinColumn(name = "repository_id")

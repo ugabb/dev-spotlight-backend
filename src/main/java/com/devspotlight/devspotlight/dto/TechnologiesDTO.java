@@ -9,7 +9,7 @@ public class TechnologiesDTO {
     @NotNull
     @NotBlank
     private String name;
-    private String icon;
+//    private String icon;
     @NotBlank
     private Long repository_id;
 }
