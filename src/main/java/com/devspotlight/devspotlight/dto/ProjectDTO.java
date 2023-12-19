@@ -20,6 +20,9 @@ public class ProjectDTO {
     private String linkRepo;
 
     private List<TechnologiesDTO> technologies;
+
+    private List<ProjectImageDTO> projectImages;
+
     private Integer likes;
     @NotBlank
     private Long userId;

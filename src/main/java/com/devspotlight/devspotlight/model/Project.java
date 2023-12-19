@@ -26,8 +26,8 @@ public class Project {
     @OneToMany(mappedBy = "project",cascade = CascadeType.ALL)
     private List<Technologies> technologies;
 
-//    @Column(name = "images")
-//    private List<> images;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<ProjectImage> projectImages;
 
     @Column(name = "likes")
     private Integer likes;
