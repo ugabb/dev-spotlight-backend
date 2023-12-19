@@ -12,5 +12,7 @@ public interface UserService {
     List<UserDTO> getAllUsers();
     String getUserRepositoryLink();
 
-    Optional<User> findByUsername(String username);
+    Optional<UserDTO> getUserById(Long userId);
+
+    Optional<UserDTO> findByUsername(String username);
 }
