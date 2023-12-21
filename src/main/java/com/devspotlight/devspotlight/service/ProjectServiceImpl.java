@@ -1,12 +1,17 @@
 package com.devspotlight.devspotlight.service;
 
 import com.devspotlight.devspotlight.dto.ProjectDTO;
+import com.devspotlight.devspotlight.dto.ProjectImageDTO;
 import com.devspotlight.devspotlight.dto.TechnologiesDTO;
 import com.devspotlight.devspotlight.model.Project;
+import com.devspotlight.devspotlight.model.ProjectImage;
 import com.devspotlight.devspotlight.model.Technologies;
+import com.devspotlight.devspotlight.repository.ProjectImagesRepository;
 import com.devspotlight.devspotlight.repository.ProjectRepository;
 import com.devspotlight.devspotlight.repository.TechnologiesRepository;
 import com.devspotlight.devspotlight.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,38 +34,47 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProjectImagesRepository projectImagesRepository;
+
     @Override
-    public Optional<ProjectDTO> createRepository(ProjectDTO request) {
-        // incompleto
-        Project repo = mapper.map(request, Project.class);
-        Project savedRepo = projectRepository.saveAndFlush(repo);
+    @Transactional  // Ensure a new transaction for the entire method
+    public Optional<ProjectDTO> createProject(ProjectDTO request) {
+        // Step 1: Create a new Project entity from ProjectDTO
+        Project projectEntity = mapper.map(request, Project.class);
 
-        Long repoId = savedRepo.getId();
+        // Step 2: Save the new Project entity to obtain its ID
+        Project savedProjectEntity = projectRepository.saveAndFlush(projectEntity);
+        Long projectId = savedProjectEntity.getId();
 
-        List<TechnologiesDTO> technologiesDTOList = request.getTechnologies();
-        for (TechnologiesDTO techDto : technologiesDTOList) {
-            Technologies tech = mapper.map(techDto, Technologies.class);
+        // Step 3: Fetch the saved Project entity along with Technologies and ProjectImages
+        Optional<Project> newRepoOptional = projectRepository.findById(projectId);
 
-            // Set the repositoryId in TechnologiesDTO
-            techDto.setRepository_id(repoId); // Setting repository ID in TechnologiesDTO
-
-            // Create a new Repository object and set its ID
-//            Repository repoForTech = new Repository();
-            repo.setId(repoId);
-
-            // Set the created Repository in Technologies
-            tech.setProject(repo);
-            technologiesRepository.saveAndFlush(tech);
-        }
-
-
-        Optional<Project> newRepoOptional = projectRepository.findById(repoId);
         if (newRepoOptional.isPresent()) {
             Project newRepo = newRepoOptional.get();
-            ProjectDTO response = mapper.map(newRepo, ProjectDTO.class);
-            for (TechnologiesDTO technologies : response.getTechnologies()) {
-                technologies.setRepository_id(repoId);
+
+            // Step 4: Set project_id in Technologies and ProjectImage entities
+            List<TechnologiesDTO> technologiesDTOList = request.getTechnologies();
+            List<ProjectImageDTO> projectImageDTOList = request.getProjectImages();
+
+            if (technologiesDTOList != null) {
+                for (TechnologiesDTO technologiesDTO : technologiesDTOList) {
+                    Technologies technologiesEntity = mapper.map(technologiesDTO, Technologies.class);
+                    technologiesEntity.setProject(newRepo); // Set the Project entity
+                    technologiesRepository.save(technologiesEntity);
+                }
             }
+
+            if (projectImageDTOList != null) {
+                for (ProjectImageDTO projectImageDTO : projectImageDTOList) {
+                    ProjectImage projectImageEntity = mapper.map(projectImageDTO, ProjectImage.class);
+                    projectImageEntity.setProject(newRepo); // Set the Project entity
+                    projectImagesRepository.save(projectImageEntity);
+                }
+            }
+
+            // Step 5: Map the result to ProjectDTO
+            ProjectDTO response = mapper.map(newRepo, ProjectDTO.class);
             return Optional.of(response);
         } else {
             // Handle the case where the repository was not found
@@ -71,17 +85,46 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<ProjectDTO> getAllProjects() {
         List<Project> projects = projectRepository.findAll();
-        List<ProjectDTO> pro =  projects.stream().map(project -> mapper.map(project, ProjectDTO.class)).collect(Collectors.toList());
-        System.out.println(pro);
-        return pro;
+        return projects.stream().map(project -> {
+            // Fetch technologies and projectImages explicitly
+//            List<Technologies> technologies = technologiesRepository.findByProject(project);
+//            List<ProjectImage> projectImages = projectImageRepository.findByProject(project);
+
+            // Map Project, Technologies, and ProjectImages to ProjectDTO
+            ProjectDTO projectDTO = mapper.map(project, ProjectDTO.class);
+//            projectDTO.setTechnologies(mapper.map(technologies, new ArrayList<TechnologiesDTO>().getClass()));
+//            projectDTO.setProjectImages(mapper.map(projectImages, new ArrayList<ProjectImageDTO>().getClass()));
+
+            return projectDTO;
+        }).collect(Collectors.toList());
     }
+
 
 
     @Override
     public List<ProjectDTO> getAllRepositoriesByUser(Long userId) {
-        List<Project> repos = projectRepository.findByUserId(userId);
-        return repos.stream()
-                .map(repo -> mapper.map(repo, ProjectDTO.class))
+        List<Project> projects = projectRepository.findByUserId(userId);
+        System.out.println(projects);
+        return projects.stream()
+                .map(proj -> {
+                    ProjectDTO projectDTO = mapper.map(proj, ProjectDTO.class);
+//                    proj.getTechnologies().forEach(tech -> {
+//                        TechnologiesDTO technologiesDTO = mapper.map(tech, TechnologiesDTO.class);
+//                        System.out.println(technologiesDTO);
+//                        technologiesDTO.setProject_id(proj.getId());
+//                        if(Objects.equals(technologiesDTO.getProject_id(), projectDTO.getId())){
+//                            projectDTO.getTechnologies().add(technologiesDTO);
+//                        }
+//                    });
+//
+//                    proj.getProjectImages().forEach(img -> {
+//                        ProjectImageDTO projectImageDTO = mapper.map(img, ProjectImageDTO.class);
+//                        projectImageDTO.setProject_id(proj.getId());
+//                        projectDTO.getProjectImages().add(projectImageDTO);
+//                    });
+
+                    return projectDTO;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -94,5 +137,16 @@ public class ProjectServiceImpl implements ProjectService {
         System.out.println(projectDTO);
 
         return Optional.of(projectDTO);
+    }
+
+    @Override
+    public void deleteProjectById(Long id) {
+        Optional<Project> project = projectRepository.findById(id);
+
+        if(project.isPresent()){
+            projectRepository.deleteById(id);
+        }else{
+            throw new EntityNotFoundException("Project not found with id: " + id);
+        }
     }
 }

@@ -7,11 +7,13 @@ import java.util.Optional;
 
 public interface ProjectService {
 
-    Optional<ProjectDTO> createRepository(ProjectDTO request);
+    Optional<ProjectDTO> createProject(ProjectDTO request);
 
     List<ProjectDTO> getAllProjects();
 
     List<ProjectDTO> getAllRepositoriesByUser(Long userId);
 
     Optional<ProjectDTO> getProjectByUserAndId(Long userId, Long id);
+
+    void deleteProjectById(Long id);
 }
