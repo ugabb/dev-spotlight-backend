@@ -6,12 +6,12 @@ import lombok.Data;
 import java.util.List;
 
 @Entity
-@Table(name = "repository")
+@Table(name = "project")
 @Data
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_repository")
+    @Column(name = "id_project")
     private Long id;
 
     @Column(name = "name")
@@ -20,14 +20,15 @@ public class Project {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "link_repository")
+    @Column(name = "link_repository", unique = true)
     private String linkRepo;
 
-    @OneToMany(mappedBy = "project",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Technologies> technologies;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ProjectImage> projectImages;
+
 
     @Column(name = "likes")
     private Integer likes;

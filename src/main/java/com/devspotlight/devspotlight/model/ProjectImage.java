@@ -12,10 +12,10 @@ public class ProjectImage {
     @Column(name = "id_project_image")
     private Long id;
 
-    @Column(name = "url", unique = true)
+    @Column(name = "url")
     private String url;
 
     @ManyToOne
-    @JoinColumn(name = "repository_id")
+    @JoinColumn(name = "project_id")
     private Project project;
 }
