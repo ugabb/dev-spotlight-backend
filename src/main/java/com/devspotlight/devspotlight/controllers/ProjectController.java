@@ -1,10 +1,10 @@
 package com.devspotlight.devspotlight.controllers;
 
 import com.devspotlight.devspotlight.dto.ProjectDTO;
-import com.devspotlight.devspotlight.model.Project;
 import com.devspotlight.devspotlight.model.User;
 import com.devspotlight.devspotlight.repository.UserRepository;
 import com.devspotlight.devspotlight.service.ProjectService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<ProjectDTO> createRepositoryController(@RequestBody @Valid ProjectDTO request) {
-        Optional<ProjectDTO> response = projectService.createRepository(request);
+        Optional<ProjectDTO> response = projectService.createProject(request);
 
         return response.map(projectDTO -> new ResponseEntity<>(projectDTO, HttpStatus.CREATED))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
@@ -59,5 +59,18 @@ public class ProjectController {
         }
 
         return (ResponseEntity<Optional<ProjectDTO>>) ResponseEntity.status(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<String> deleteProjectController(@PathVariable("projectId") Long projectId){
+        try{
+            projectService.deleteProjectById(projectId);
+
+            return ResponseEntity.ok("Project deleted successfully");
+        }catch (EntityNotFoundException e){
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting project");
+        }
     }
 }
