@@ -3,9 +3,12 @@ package com.devspotlight.devspotlight.service;
 import com.devspotlight.devspotlight.dto.ProjectDTO;
 import com.devspotlight.devspotlight.dto.ProjectImageDTO;
 import com.devspotlight.devspotlight.dto.TechnologiesDTO;
+import com.devspotlight.devspotlight.exceptions.ProjectNotFoundException;
+import com.devspotlight.devspotlight.exceptions.UserNotFoundException;
 import com.devspotlight.devspotlight.model.Project;
 import com.devspotlight.devspotlight.model.ProjectImage;
 import com.devspotlight.devspotlight.model.Technologies;
+import com.devspotlight.devspotlight.model.User;
 import com.devspotlight.devspotlight.repository.ProjectImagesRepository;
 import com.devspotlight.devspotlight.repository.ProjectRepository;
 import com.devspotlight.devspotlight.repository.TechnologiesRepository;
@@ -126,6 +129,25 @@ public class ProjectServiceImpl implements ProjectService {
                     return projectDTO;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<ProjectDTO> getProjectByUserIAndProjectName(Long userId, String projectName) throws UserNotFoundException {
+        // verifica se usuario existe
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) throw new UserNotFoundException("User not found with id:" + userId);
+
+        // verifica se usuario tem projetos existe
+        List<Project> projects = projectRepository.findByUserId(userId);
+        if(projects.isEmpty()) throw new ProjectNotFoundException()
+
+        // verifica se o projeto existe
+        Optional<Project> project = projects.stream().filter(proj -> Objects.equals(proj.getName(), projectName)).findFirst();
+        if(project.isPresent()){
+            ProjectDTO projectDTO = mapper.map(project, ProjectDTO.class);
+            return Optional.of(projectDTO);
+        }
+        return Optional.empty();
     }
 
     @Override

@@ -32,9 +32,24 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjectDTO>> getAllProjectsController(){
+    public ResponseEntity<List<ProjectDTO>> getAllProjectsController() {
         return ResponseEntity.ok(projectService.getAllProjects());
     }
+
+    @GetMapping("/{userId}/{projectName}")
+    public ResponseEntity<Optional<ProjectDTO>> getProjectByNameController(@PathVariable("userId") Long userId, @PathVariable("projectName") String projectName) {
+       try {
+           Optional<ProjectDTO> projectDTO = projectService.getProjectByUserIAndProjectName(userId, projectName);
+           if(projectDTO.isPresent()) {
+               return ResponseEntity.ok(projectDTO);
+           } else{
+               return ResponseEntity.notFound().build();
+           }
+       }catch (EntityNotFoundException e){
+           return ResponseEntity.notFound().build();
+       }
+    }
+
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ProjectDTO>> getAllRepositoriesByUserController(@PathVariable("userId") Long userId) {
@@ -62,14 +77,14 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<String> deleteProjectController(@PathVariable("projectId") Long projectId){
-        try{
+    public ResponseEntity<String> deleteProjectController(@PathVariable("projectId") Long projectId) {
+        try {
             projectService.deleteProjectById(projectId);
 
             return ResponseEntity.ok("Project deleted successfully");
-        }catch (EntityNotFoundException e){
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e){
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting project");
         }
     }
