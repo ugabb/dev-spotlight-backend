@@ -19,6 +19,8 @@ public class ProjectDTO {
     @NotNull
     private String linkRepo;
 
+    private String deployedLink;
+
     private List<TechnologiesDTO> technologies;
 
     private List<ProjectImageDTO> projectImages;
