@@ -1,6 +1,7 @@
 package com.devspotlight.devspotlight.service;
 
 import com.devspotlight.devspotlight.dto.ProjectDTO;
+import com.devspotlight.devspotlight.exceptions.ProjectNotFoundException;
 import com.devspotlight.devspotlight.exceptions.UserNotFoundException;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface ProjectService {
 
     List<ProjectDTO> getAllRepositoriesByUser(Long userId);
 
-    Optional<ProjectDTO> getProjectByUserIAndProjectName(Long userId, String projectName) throws UserNotFoundException;
+    Optional<ProjectDTO> getProjectByUserIAndProjectName(Long userId, String projectName) throws UserNotFoundException, ProjectNotFoundException;
 
     Optional<ProjectDTO> getProjectByUserAndId(Long userId, Long id);
 
