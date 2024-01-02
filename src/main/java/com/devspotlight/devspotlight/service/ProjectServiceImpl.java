@@ -132,14 +132,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Optional<ProjectDTO> getProjectByUserIAndProjectName(Long userId, String projectName) throws UserNotFoundException {
+    public Optional<ProjectDTO> getProjectByUserIAndProjectName(Long userId, String projectName) throws UserNotFoundException, ProjectNotFoundException {
         // verifica se usuario existe
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) throw new UserNotFoundException("User not found with id:" + userId);
 
         // verifica se usuario tem projetos existe
         List<Project> projects = projectRepository.findByUserId(userId);
-        if(projects.isEmpty()) throw new ProjectNotFoundException()
+        if(projects.isEmpty()) throw new ProjectNotFoundException("Project Not Found");
 
         // verifica se o projeto existe
         Optional<Project> project = projects.stream().filter(proj -> Objects.equals(proj.getName(), projectName)).findFirst();

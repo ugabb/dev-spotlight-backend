@@ -1,6 +1,8 @@
 package com.devspotlight.devspotlight.controllers;
 
 import com.devspotlight.devspotlight.dto.ProjectDTO;
+import com.devspotlight.devspotlight.exceptions.ProjectNotFoundException;
+import com.devspotlight.devspotlight.exceptions.UserNotFoundException;
 import com.devspotlight.devspotlight.model.User;
 import com.devspotlight.devspotlight.repository.UserRepository;
 import com.devspotlight.devspotlight.service.ProjectService;
@@ -47,6 +49,10 @@ public class ProjectController {
            }
        }catch (EntityNotFoundException e){
            return ResponseEntity.notFound().build();
+       } catch (UserNotFoundException e) {
+           throw new RuntimeException(e);
+       } catch (ProjectNotFoundException e) {
+           throw new RuntimeException(e);
        }
     }
 
