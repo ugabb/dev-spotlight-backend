@@ -30,7 +30,7 @@ public class ProjectController {
         Optional<ProjectDTO> response = projectService.createProject(request);
 
         return response.map(projectDTO -> new ResponseEntity<>(projectDTO, HttpStatus.CREATED))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.CONFLICT));
     }
 
     @GetMapping
