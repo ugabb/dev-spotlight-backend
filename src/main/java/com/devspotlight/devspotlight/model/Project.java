@@ -20,6 +20,9 @@ public class Project {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "deployed_link")
+    private String deployedLink;
+
     @Column(name = "link_repository", unique = true)
     private String linkRepo;
 

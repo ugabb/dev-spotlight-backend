@@ -19,11 +19,13 @@ public class ProjectDTO {
     @NotNull
     private String linkRepo;
 
+    private String deployedLink;
+
     private List<TechnologiesDTO> technologies;
 
     private List<ProjectImageDTO> projectImages;
 
     private Integer likes;
     @NotBlank
-    private Long userId;
+    private UserDTO user;
 }

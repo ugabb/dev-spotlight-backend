@@ -32,13 +32,13 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getUsers(){
+    public ResponseEntity<List<UserDTO>> getUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
 
     @GetMapping("{userId}")
-    public ResponseEntity<UserDTO> getUserByIdController(@PathVariable Long userId){
+    public ResponseEntity<UserDTO> getUserByIdController(@PathVariable Long userId) {
         Optional<UserDTO> userDTO = userService.getUserById(userId);
         return userDTO.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -48,13 +48,23 @@ public class UserController {
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
         Optional<UserDTO> userDTO = userService.findByUsername(username);
         return userDTO.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>( HttpStatus.NOT_FOUND));
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 
-
     @GetMapping("/user")
-    public Map<String, Object> getUser(@AuthenticationPrincipal OAuth2User oAuth2User){
+    public Map<String, Object> getUser(@AuthenticationPrincipal OAuth2User oAuth2User) {
         return oAuth2User.getAttributes();
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId,@RequestBody @Valid UserDTO body) {
+        Optional<UserDTO> response = userService.updateUser(userId, body);
+        if (response.isPresent()) {
+            return ResponseEntity.ok(response.get());
+        } else if(response.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

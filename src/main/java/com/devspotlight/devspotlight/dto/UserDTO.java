@@ -11,8 +11,7 @@ import java.util.List;
 
 @Data
 public class UserDTO {
-
-
+    private Long id;
     @NotBlank
     private String name;
     @NotBlank

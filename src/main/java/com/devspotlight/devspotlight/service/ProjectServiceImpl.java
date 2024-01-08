@@ -139,7 +139,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         // verifica se usuario tem projetos existe
         List<Project> projects = projectRepository.findByUserId(userId);
-        if(projects.isEmpty()) throw new ProjectNotFoundException("Project Not Found");
+        if(projects.isEmpty()) throw new ProjectNotFoundException("Project not found with name: " + projectName);   
 
         // verifica se o projeto existe
         Optional<Project> project = projects.stream().filter(proj -> Objects.equals(proj.getName(), projectName)).findFirst();

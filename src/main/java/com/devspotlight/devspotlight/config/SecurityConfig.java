@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                                 .requestMatchers("/login").permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
 
                 ).httpBasic(Customizer.withDefaults());
 //                .oauth2Login(oauth -> {
