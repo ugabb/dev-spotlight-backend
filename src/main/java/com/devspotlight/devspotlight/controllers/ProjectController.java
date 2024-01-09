@@ -40,16 +40,16 @@ public class ProjectController {
 
     @GetMapping("/{userId}/{projectName}")
     public ResponseEntity<Optional<ProjectDTO>> getProjectByNameController(@PathVariable("userId") Long userId, @PathVariable("projectName") String projectName) {
-       try {
-           Optional<ProjectDTO> projectDTO = projectService.getProjectByUserIAndProjectName(userId, projectName);
-           if(projectDTO.isPresent()) {
-               return ResponseEntity.ok(projectDTO);
-           } else{
-               return ResponseEntity.notFound().build();
-           }
-       }catch (EntityNotFoundException | UserNotFoundException | ProjectNotFoundException e){
-           return ResponseEntity.notFound().build();
-       }
+        try {
+            Optional<ProjectDTO> projectDTO = projectService.getProjectByUserIAndProjectName(userId, projectName);
+            if(projectDTO.isPresent()) {
+                return ResponseEntity.ok(projectDTO);
+            } else{
+                return ResponseEntity.notFound().build();
+            }
+        }catch (EntityNotFoundException | UserNotFoundException | ProjectNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

@@ -58,4 +58,23 @@ public class UserServiceImpl implements UserService {
         return user.map(u -> mapper.map(u, UserDTO.class));
     }
 
+    @Override
+    public Optional<UserDTO> updateUser(long userId, UserDTO body) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            user.setEmail(body.getEmail());
+            user.setName(body.getName());
+            user.setGithubProfileLink(body.getGithubProfileLink());
+            user.setGithubProfilePhoto(body.getGithubProfilePhoto());
+            user.setUsername(body.getUsername());
+            userRepository.saveAndFlush(user);
+
+            UserDTO response = mapper.map(user, UserDTO.class);
+            return Optional.of(response);
+        };
+        return Optional.empty();
+    }
+
 }

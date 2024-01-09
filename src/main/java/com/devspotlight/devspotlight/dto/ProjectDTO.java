@@ -27,5 +27,5 @@ public class ProjectDTO {
 
     private Integer likes;
     @NotBlank
-    private Long userId;
+    private UserDTO user;
 }

@@ -15,4 +15,6 @@ public interface UserService {
     Optional<UserDTO> getUserById(Long userId);
 
     Optional<UserDTO> findByUsername(String username);
+
+    Optional<UserDTO> updateUser(long userId, UserDTO body);
 }
