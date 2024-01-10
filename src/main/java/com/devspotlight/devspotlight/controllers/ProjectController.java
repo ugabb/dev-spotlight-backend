@@ -1,5 +1,6 @@
 package com.devspotlight.devspotlight.controllers;
 
+import com.devspotlight.devspotlight.dto.ProjectCreationDTO;
 import com.devspotlight.devspotlight.dto.ProjectDTO;
 import com.devspotlight.devspotlight.exceptions.ProjectNotFoundException;
 import com.devspotlight.devspotlight.exceptions.UserNotFoundException;
@@ -26,7 +27,7 @@ public class ProjectController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<ProjectDTO> createRepositoryController(@RequestBody @Valid ProjectDTO request) {
+    public ResponseEntity<ProjectDTO> createRepositoryController(@RequestBody @Valid ProjectCreationDTO request) {
         Optional<ProjectDTO> response = projectService.createProject(request);
 
         return response.map(projectDTO -> new ResponseEntity<>(projectDTO, HttpStatus.CREATED))

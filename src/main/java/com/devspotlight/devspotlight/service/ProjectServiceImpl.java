@@ -1,5 +1,6 @@
 package com.devspotlight.devspotlight.service;
 
+import com.devspotlight.devspotlight.dto.ProjectCreationDTO;
 import com.devspotlight.devspotlight.dto.ProjectDTO;
 import com.devspotlight.devspotlight.dto.ProjectImageDTO;
 import com.devspotlight.devspotlight.dto.TechnologiesDTO;
@@ -42,7 +43,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional  // Ensure a new transaction for the entire method
-    public Optional<ProjectDTO> createProject(ProjectDTO request) {
+    public Optional<ProjectDTO> createProject(ProjectCreationDTO request) {
         // Step 1: Create a new Project entity from ProjectDTO
         Project projectEntity = mapper.map(request, Project.class);
 
@@ -75,6 +76,11 @@ public class ProjectServiceImpl implements ProjectService {
                     projectImagesRepository.save(projectImageEntity);
                 }
             }
+
+            userRepository.findById(request.getUserId()).ifPresent(user -> {
+                newRepo.setUser(user);
+                projectRepository.save(newRepo);
+            });
 
             // Step 5: Map the result to ProjectDTO
             ProjectDTO response = mapper.map(newRepo, ProjectDTO.class);

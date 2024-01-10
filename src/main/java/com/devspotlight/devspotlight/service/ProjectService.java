@@ -1,5 +1,6 @@
 package com.devspotlight.devspotlight.service;
 
+import com.devspotlight.devspotlight.dto.ProjectCreationDTO;
 import com.devspotlight.devspotlight.dto.ProjectDTO;
 import com.devspotlight.devspotlight.exceptions.ProjectNotFoundException;
 import com.devspotlight.devspotlight.exceptions.UserNotFoundException;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public interface ProjectService {
 
-    Optional<ProjectDTO> createProject(ProjectDTO request);
+    Optional<ProjectDTO> createProject(ProjectCreationDTO request);
 
     List<ProjectDTO> getAllProjects();
 
