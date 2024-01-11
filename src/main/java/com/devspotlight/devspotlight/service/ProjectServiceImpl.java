@@ -92,6 +92,34 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public ProjectDTO addLikeProject(Long projectId) throws ProjectNotFoundException {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        if (optionalProject.isEmpty()) throw new ProjectNotFoundException("Project not found with id:" + projectId);
+
+        Project project = optionalProject.get();
+        project.setLikes(project.getLikes() + 1);
+        projectRepository.save(project);
+
+        ProjectDTO projectDTO = mapper.map(project, ProjectDTO.class);
+
+        return projectDTO;
+    }
+
+    @Override
+    public ProjectDTO removeLikeProject(Long projectId) throws ProjectNotFoundException {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        if (optionalProject.isEmpty()) throw new ProjectNotFoundException("Project not found with id:" + projectId);
+
+        Project project = optionalProject.get();
+        if(project.getLikes() > 0){
+            project.setLikes(project.getLikes() - 1);
+            projectRepository.save(project);
+        }
+        ProjectDTO projectDTO = mapper.map(project, ProjectDTO.class);
+        return projectDTO;
+    }
+
+    @Override
     public List<ProjectDTO> getAllProjects() {
         List<Project> projects = projectRepository.findAll();
         return projects.stream().map(project -> {
