@@ -34,6 +34,26 @@ public class ProjectController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.CONFLICT));
     }
 
+    @PostMapping("/{projectId}/likes/add")
+    public ResponseEntity<ProjectDTO> addLikeProjectController(@PathVariable("projectId") Long projectId){
+        try{
+            ProjectDTO res = projectService.addLikeProject(projectId);
+            return ResponseEntity.ok(res);
+        } catch (ProjectNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/{projectId}/likes/remove")
+    public ResponseEntity<ProjectDTO> removeLikeProjectController(@PathVariable("projectId") Long projectId){
+        try{
+            ProjectDTO res = projectService.removeLikeProject(projectId);
+            return ResponseEntity.ok(res);
+        } catch (ProjectNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<ProjectDTO>> getAllProjectsController() {
         return ResponseEntity.ok(projectService.getAllProjects());

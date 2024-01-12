@@ -12,6 +12,9 @@ public interface ProjectService {
 
     Optional<ProjectDTO> createProject(ProjectCreationDTO request);
 
+    ProjectDTO addLikeProject(Long projectId) throws ProjectNotFoundException;
+    ProjectDTO removeLikeProject(Long projectId) throws ProjectNotFoundException;
+
     List<ProjectDTO> getAllProjects();
 
     List<ProjectDTO> getAllRepositoriesByUser(Long userId);
