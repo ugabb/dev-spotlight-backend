@@ -1,5 +1,6 @@
 package com.devspotlight.devspotlight.model;
 
+import com.devspotlight.devspotlight.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,7 +43,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Project> repositories;
 
-//   @OneToMany(mappedBy = "user")
+    //   @OneToMany(mappedBy = "user")
 //    private List<Followers> followers;
     private Integer followers;
 
@@ -52,6 +53,18 @@ public class User implements UserDetails {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User(com.devspotlight.devspotlight.record.UserDTO data) {
+        this.name = data.name();
+        this.email = data.email();
+        this.favoritesRepositories = data.favoritesRepositories();
+        this.followers = data.followers();
+        this.role = data.role();
+        this.githubProfileLink = data.githubProfileLink();
+        this.githubProfilePhoto = data.githubProfilePhoto();
+        this.username = data.username();
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
